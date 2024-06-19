@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+    <h1>Editar Usuario</h1>
+
+    <!-- Listado de usuarios -->
+    <div id="listadoUsuarios">
+        <h2>Listado de Usuarios</h2>
+        <table id="tablaUsuarios">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>País</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.apellido }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.fechaNacimiento }}</td>
+                    <td>{{ usuario.pais }}</td>
+                    <td>
+                        <form action="{{ url_for('editar_usuario_id', id=usuario.id) }}" method="GET">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulario para editar un usuario -->
+    {% if usuario_editar %}
+    <form id="formEditarUsuario" action="{{ url_for('editar_usuario_id', id=usuario_editar.id) }}" method="POST">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" value="{{ usuario_editar.nombre }}" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ usuario_editar.email }}" required>
+        </div>
+        <div>
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" name="edad" value="{{ usuario_editar.edad }}" required>
+        </div>
+        <div>
+            <button type="submit">Guardar Cambios</button>
+            <button type="button" onclick="cancelarEdicion()">Cancelar</button>
+        </div>
+    </form>
+    {% endif %}
+
+    <!-- Mensaje de éxito o error -->
+    <div id="mensaje">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
