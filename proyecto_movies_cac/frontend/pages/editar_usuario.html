@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: black; /* Color de texto negro para los encabezados de columna */
+        }
+        td button {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar Usuario</h1>
+
+    <!-- Listado de usuarios -->
+    <div id="listadoUsuarios">
+        <h2>Listado de Usuarios</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>País</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.apellido }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.fechaNacimiento }}</td>
+                    <td>{{ usuario.pais }}</td>
+                    <td>
+                        <form action="{{ url_for('editar_usuario_id', id=usuario.id) }}" method="GET">
+                            <button type="submit">Editar</button>
+                        </form>
+                        <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulario para editar un usuario -->
+    {% if usuario_editar %}
+    <div id="formEditarUsuario">
+        <h2>Editar Usuario</h2>
+        <form action="{{ url_for('editar_usuario_id', id=usuario_editar.id) }}" method="POST">
+            <div>
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="{{ usuario_editar.nombre }}" required>
+                          
+            </div>
+            <div>
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" value="{{ usuario_editar.apellido }}" required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ usuario_editar.email }}" required>
+            </div>
+            <div>
+                <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="fechaNacimiento" name="fechaNacimiento" value="{{ usuario_editar.fechaNacimiento }}" required>
+            </div>
+            <div>
+                <label for="pais">País:</label>
+                <select id="pais" name="pais" required>
+                    <option value="">Seleccione un país</option>
+                    <option value="AR" {% if usuario_editar.pais == 'AR' %} selected {% endif %}>Argentina</option>
+                    <option value="BO" {% if usuario_editar.pais == 'BO' %} selected {% endif %}>Bolivia</option>
+                    <option value="BR" {% if usuario_editar.pais == 'BR' %} selected {% endif %}>Brasil</option>
+                    <option value="CH" {% if usuario_editar.pais == 'CH' %} selected {% endif %}>Chile</option>
+                    <option value="CO" {% if usuario_editar.pais == 'CO' %} selected {% endif %}>Colombia</option>
+                    <option value="EC" {% if usuario_editar.pais == 'EC' %} selected {% endif %}>Ecuador</option>
+                    <option value="PY" {% if usuario_editar.pais == 'PY' %} selected {% endif %}>Paraguay</option>
+                    <option value="PE" {% if usuario_editar.pais == 'PE' %} selected {% endif %}>Perú</option>
+                    <option value="UY" {% if usuario_editar.pais == 'UY' %} selected {% endif %}>Uruguay</option>
+                    <option value="VE" {% if usuario_editar.pais == 'VE' %} selected {% endif %}>Venezuela</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">Guardar Cambios</button>
+                <button type="button" onclick="cancelarEdicion()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Mensaje de éxito o error -->
+    <div id="mensaje">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
