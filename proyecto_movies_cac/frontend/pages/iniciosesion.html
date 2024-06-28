@@ -12,7 +12,7 @@
 </head>
 <body class="bodyRegistrarse">
     <header class="headerRegistrarse">
-        <a class="anclaLogo" href="../index.html">
+        <a class="anclaLogo" href="/">
             <i class="fas fa-film" aria-hidden="true"></i>
             <span>CAC-Movies</span>
         </a>
@@ -21,6 +21,9 @@
         <section data-aos="zoom-in" data-aos-duration="1000" class="seccionRegistrarse">
             <form action="/login" method="POST">
                 <h2 class="tituloRegistrarse">Iniciar Sesión</h2>
+                {% if error_message %}
+                <div class="flash-error">{{ error_message }}</div>
+            {% endif %}
                 <div>
                     <input type="email" placeholder="Email" id="email" name="email"> <!-- Nombre debe ser 'email' -->
                     <div class="error-text"></div>
@@ -33,7 +36,7 @@
                     <input class="boton" type="submit" value="Iniciar Sesión">
                 </div>
                 <div>
-                    <a id="ayuda" class="ayuda" href="registrarse.html">Registrarse</a>
+                    <a id="ayuda" class="ayuda" href="{{ url_for('register') }}">Registrarse</a>
                 </div>
             </form>
         

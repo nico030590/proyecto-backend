@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //agrega la clase error al div padre del campo
         formControl.classList.add('error');
         //muestra el mensaje de error
-        errorText.innerText = message;
+        if (errorText) {errorText.innerText = message;}
         //pone el foco en el campo
         input.focus();
     };
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //levanta por su clase el elemento que contiene el mensaje de error
         const errorText = formControl.querySelector('.error-text');
         //elimina el mensaje de error
-        errorText.innerText = '';
+        if (errorText){errorText.innerText = ''};
     };
     // funcion que valida si es un mail valido con una expresion regular
     const isEmail = (email) => {

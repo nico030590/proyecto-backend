@@ -58,9 +58,9 @@ def create_app():
                 login_user(nuevo_usuario)
 
                 flash('Registro exitoso')
-                return redirect(url_for('index'))  # Redirige a la página principal después del registro exitoso
+                return redirect(url_for('iniciar_sesion'))  # Redirige a la página principal después del registro exitoso
             except Exception as e:
-                flash('Error al registrar usuario: ' + str(e))  # Manejo de errores
+                flash('Error al registrar usuario',"error")  # Manejo de errores
                 db.session.rollback()  # Revierte la sesión en caso de error
 
         return render_template('registrarse.html')
@@ -71,17 +71,15 @@ def create_app():
         if request.method == 'POST':
             email = request.form['email']
             password = request.form['password']
-
-            # Buscar al usuario por el email
             usuario = Usuario.query.filter_by(email=email).first()
 
-            if usuario and usuario.check_password(password):
-                # Autenticar al usuario
-                login_user(usuario)
-                flash('Inicio de sesión exitoso', 'success')
-                return redirect(url_for('index'))
+            if not usuario or not usuario.check_password(password):
+                error_message = 'Credenciales incorrectas'
+                return render_template('iniciosesion.html', error_message=error_message)
 
-            flash('Credenciales incorrectas', 'error')
+            login_user(usuario)
+            flash('Inicio de sesión exitoso', 'success')
+            return redirect(url_for('index'))
 
         return render_template('iniciosesion.html')
 
