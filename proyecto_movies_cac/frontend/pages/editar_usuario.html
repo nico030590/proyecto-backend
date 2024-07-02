@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Usuario</title>
     <link rel="stylesheet" href="../css/estilos.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         table {
             width: 100%;
@@ -26,6 +30,15 @@
     </style>
 </head>
 <body>
+    <header class="header">
+        <nav class="navegacion">
+            <a class="anclaLogo" href="/">
+                <i class="fas fa-film" aria-hidden="true"></i>
+                <span>CAC-Movies</span>
+            </a>
+        </nav>
+    </header>
+    <main>
     <h1>Editar Usuario</h1>
 
     <!-- Listado de usuarios -->
@@ -56,7 +69,11 @@
                         <form action="{{ url_for('editar_usuario_id', id=usuario.id) }}" method="GET">
                             <button type="submit">Editar</button>
                         </form>
-                        <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
+                        <!-- <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit">Eliminar</button>
+                        </form> -->
+                        <form action="{{ url_for('eliminar_usuario', id=usuario.id) }}" method="POST" onsubmit="return confirmarEliminacion(event, this)">
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit">Eliminar</button>
                         </form>
@@ -125,5 +142,27 @@
         {% endif %}
         {% endwith %}
     </div>
+</main>
+    <script>
+        function confirmarEliminacion(event, form) {
+            event.preventDefault(); // Prevenir el envío del formulario
+    
+            Swal.fire({
+                title: '¿Estás seguro de que deseas eliminar este usuario?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Enviar el formulario si se confirma
+                }
+            });
+        }
+    </script>
+    
 </body>
 </html>
