@@ -10,6 +10,12 @@
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        h1{
+            margin: 3px;
+        }
+        h3{
+            margin: 3px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -17,7 +23,7 @@
         }
         th, td {
             padding: 10px;
-            text-align: left;
+            text-align: center;
             border-bottom: 1px solid #ddd;
         }
         th {
@@ -26,7 +32,51 @@
         }
         td button {
             padding: 5px 10px;
+            margin: 2px;
         }
+
+        .actions {
+            display:flex;
+            justify-content: center;
+        }
+
+        section {
+            flex: 1;
+            padding: 1rem;
+            padding-top: 5rem;
+            color: white;
+        }
+
+        .formWrapper {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem;
+}
+
+.formWrapper > label{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    width: 10rem;
+    row-gap: 0.25rem;
+}
+
+.formWrapper > input[type="text"], input[type="email"], input[type="tel"], select,textarea {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    max-width: 20rem;
+    margin:0.25rem !important;
+}
+
+.btn-wrapper {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    margin-top: 0.5rem;
+    padding: 4px 6px;
+}
+form label {
+    text-align: left; /* Alineación a la izquierda */
+    margin:0 !important;
+}
     </style>
 </head>
 <body>
@@ -39,11 +89,10 @@
         </nav>
     </header>
     <main>
-    <h1>Editar Usuario</h1>
-
     <!-- Listado de usuarios -->
+    {% if not usuario_editar %}
     <div id="listadoUsuarios">
-        <h2>Listado de Usuarios</h2>
+        <h1>Listado de Usuarios</h2>
         <table>
             <thead>
                 <tr>
@@ -65,7 +114,7 @@
                     <td>{{ usuario.email }}</td>
                     <td>{{ usuario.fechaNacimiento }}</td>
                     <td>{{ usuario.pais }}</td>
-                    <td>
+                    <td class="actions">
                         <form action="{{ url_for('editar_usuario_id', id=usuario.id) }}" method="GET">
                             <button type="submit">Editar</button>
                         </form>
@@ -83,11 +132,13 @@
             </tbody>
         </table>
     </div>
-
+    {% endif %}
     <!-- Formulario para editar un usuario -->
     {% if usuario_editar %}
-    <div id="formEditarUsuario">
-        <h2>Editar Usuario</h2>
+    <section>
+    <h2>Editar Usuario</h2>
+
+    <div id="formEditarUsuario" class="formWrapper">
         <form action="{{ url_for('editar_usuario_id', id=usuario_editar.id) }}" method="POST">
             <div>
                 <label for="nombre">Nombre:</label>
@@ -122,12 +173,13 @@
                     <option value="VE" {% if usuario_editar.pais == 'VE' %} selected {% endif %}>Venezuela</option>
                 </select>
             </div>
-            <div>
-                <button type="submit">Guardar Cambios</button>
-                <button type="button" onclick="cancelarEdicion()">Cancelar</button>
+            <div class="btn-wrapper">
+                <button type="submit" onclick="abrirModal()">Guardar Cambios</button>
+                <button type="button" onclick="window.history.back();">Cancelar</button>
             </div>
         </form>
     </div>
+    </section>
     {% endif %}
 
     <!-- Mensaje de éxito o error -->
@@ -136,14 +188,14 @@
         {% if messages %}
         <ul>
             {% for message in messages %}
-            <li>{{ message }}</li>
+            <li><h3>{{ message }}</h3></li>
             {% endfor %}
         </ul>
         {% endif %}
         {% endwith %}
     </div>
 </main>
-    <script>
+    <script>        
         function confirmarEliminacion(event, form) {
             event.preventDefault(); // Prevenir el envío del formulario
     
@@ -162,6 +214,8 @@
                 }
             });
         }
+
+        
     </script>
     
 </body>
