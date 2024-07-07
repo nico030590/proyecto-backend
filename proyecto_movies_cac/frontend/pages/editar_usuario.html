@@ -92,7 +92,7 @@ form label {
     <!-- Listado de usuarios -->
     {% if not usuario_editar %}
     <div id="listadoUsuarios">
-        <h1>Listado de Usuarios</h2>
+        <h1 style="text-align: center;">Listado de Usuarios</h1>
         <table>
             <thead>
                 <tr>
@@ -183,7 +183,7 @@ form label {
     {% endif %}
 
     <!-- Mensaje de éxito o error -->
-    <div id="mensaje">
+    <!-- <div id="mensaje">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
@@ -193,7 +193,7 @@ form label {
         </ul>
         {% endif %}
         {% endwith %}
-    </div>
+    </div> -->
 </main>
     <script>        
         function confirmarEliminacion(event, form) {
